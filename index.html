@@ -167,7 +167,7 @@ footer{border-top:1px solid var(--line);padding:52px 0 40px;color:var(--muted);f
 <nav><div class="nav-in">
   <a class="brand" href="#top"><div class="nova-avatar" style="width:42px;height:42px;border-radius:50%;border:2px solid var(--line-hi);box-shadow:0 0 18px rgba(56,225,255,.35)"></div><b>My<span>Agent</span></b></a>
   <div class="nav-links">
-    <a href="#services">Services</a><a href="#playbooks">Playbooks</a><a href="#faq">FAQ</a><a href="#contact">Contact</a>
+    <a href="#services">Services</a><a href="#playbooks">Playbooks</a><a href="questionnaire.html">Questionnaire</a><a href="#faq">FAQ</a><a href="#contact">Contact</a>
     <a class="btn sm" href="#contact">Get Started</a>
   </div>
 </div></nav>
@@ -262,7 +262,8 @@ footer{border-top:1px solid var(--line);padding:52px 0 40px;color:var(--muted);f
 
 <!-- CONTACT -->
 <section id="contact" style="padding-top:20px"><div class="wrap">
-  <div class="sec-head rv"><h2>Start the <span class="gx">conversation</span></h2><p>Tell us about your business. We reply within one business day.</p></div>
+  <div class="sec-head rv"><h2>Start the <span class="gx">conversation</span></h2><p>Tell us about your business. We reply within one business day.</p>
+  <p style="margin-top:16px"><a class="btn ghost" href="questionnaire.html" style="font-size:.95rem;padding:12px 28px">Or start with the pre-onboarding questionnaire →</a></p></div>
   <form class="contact rv" id="contact-form">
     <label for="c-name">Your name</label><input id="c-name" required>
     <label for="c-email">Email</label><input id="c-email" type="email" required>
@@ -352,6 +353,7 @@ document.getElementById('contact-form').addEventListener('submit',function(e){
     {k:['sprint','build'],r:"The <b>Build Sprint ($1,500)</b> is one working AI system, live in your business — receptionist, booking, follow-up, whatever the audit flagged as highest-ROI. Fixed scope, fixed price, tested with you before handoff, with docs your team can follow."},
     {k:['retainer','monthly','ongoing'],r:"The <b>Optimization Retainer ($500/mo)</b> keeps your systems monitored and improved — new automations as you grow, priority support, and a monthly report showing what changed. Month-to-month, cancel anytime."},
     {k:['playbook','gumroad','ebook','e-book','diy','course'],r:"The <a href='https://myagentllc.gumroad.com' target='_blank'>Gumroad store</a> has 14 step-by-step automation playbooks — 10 industry guides ($39–$59), 3 bundles ($99), and the complete library ($197). Use code <b>NOVA20</b> for 20% off. Written for owners, not engineers."},
+    {k:['questionnaire','intake','form','apply','onboard'],r:"We have a standard <b>pre-onboarding questionnaire</b> — 10 minutes, 6 sections, and it means our first call is about solutions instead of background. It's right here: <a href='questionnaire.html' target='_blank'>myagentllc.github.io/questionnaire.html</a>."},
     {k:['book','schedule','appointment','call','talk','meet'],r:"Online booking is coming soon. For now, use the contact form below — tell me what you need and I'll reply within one business day with times."},
     {k:['contact','email','human','person','phone'],r:"You can reach us at <a href='mailto:myagentllc2026@gmail.com'>myagentllc2026@gmail.com</a> — or just use the contact form on this page and it lands in the same inbox."},
     {k:['who are you','your name','nova','myagent','about'],r:"I'm <b>Nova</b> — the AI behind MyAgent. MyAgent builds practical AI automation for small businesses: receptionists that never miss a call, workflows that run themselves, and DIY playbooks. No fluff, just what works."},
