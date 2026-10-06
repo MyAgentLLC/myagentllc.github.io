@@ -216,7 +216,7 @@ footer{border-top:1px solid var(--line);padding:52px 0 40px;color:var(--muted);f
     </div>
     <div class="card rv">
       <div class="icon">🚀</div><h3>Optimization Retainer</h3>
-      <div class="price">$500<span style="font-size:1.1rem">/mo</span></div><div class="per">month-to-month · cancel anytime</div>
+      <div class="price">$500<span style="font-size:1.1rem">/mo</span></div><div class="per">3-month minimum · then month-to-month</div>
       <ul><li>Your systems monitored &amp; improved monthly</li><li>New automations as your business grows</li><li>Priority support, direct line</li><li>Monthly report — what changed, what it saved</li></ul>
       <a class="btn" href="#contact">Go Monthly</a>
     </div>
@@ -269,7 +269,7 @@ footer{border-top:1px solid var(--line);padding:52px 0 40px;color:var(--muted);f
     <label for="c-email">Email</label><input id="c-email" type="email" required>
     <label for="c-biz">Business name &amp; type</label><input id="c-biz" placeholder="e.g. Redding Tree Service — tree care" required>
     <label for="c-need">What should we look at?</label>
-    <select id="c-need"><option>AI Waste Audit — $300</option><option>Build Sprint — $1,500</option><option>Optimization Retainer — $500/mo</option><option>Not sure yet — advise me</option></select>
+    <select id="c-need"><option>AI Waste Audit — $300</option><option>Build Sprint — $1,500</option><option>Optimization Retainer — $500/mo (3-mo min)</option><option>Not sure yet — advise me</option></select>
     <label for="c-msg">Anything we should know?</label><textarea id="c-msg" rows="4" placeholder="Missed calls, scheduling chaos, follow-up falling through the cracks…"></textarea>
     <button class="btn" type="submit">Send →</button>
     <p class="micro">Opens your email app with everything filled in. Nothing is stored on this site.</p>
@@ -348,10 +348,10 @@ document.getElementById('contact-form').addEventListener('submit',function(e){
       closeBtn=document.getElementById('nova-close'),opened=false,speakOn=false,recog=null,listening=false;
 
   var BRAIN=[
-    {k:['price','cost','how much','pricing','charge'],r:"Here is the menu: <b>AI Waste Audit — $300</b> (one-time, 24hr turnaround), <b>Build Sprint — $1,500</b> (one working system, fixed price), <b>Optimization Retainer — $500/mo</b> (month-to-month). Playbooks run $39–$59 on <a href='https://myagentllc.gumroad.com' target='_blank'>Gumroad</a> — code NOVA20 takes 20% off."},
+    {k:['price','cost','how much','pricing','charge'],r:"Here is the menu: <b>AI Waste Audit — $300</b> (one-time, 24hr turnaround), <b>Build Sprint — $1,500</b> (one working system, fixed price), <b>Optimization Retainer — $500/mo</b> (3-month minimum). Playbooks run $39–$59 on <a href='https://myagentllc.gumroad.com' target='_blank'>Gumroad</a> — code NOVA20 takes 20% off."},
     {k:['audit'],r:"The <b>AI Waste Audit ($300)</b> starts with a 30-minute call about your tools and bottlenecks. Within 24 hours you get a written report: your top 3 automation opportunities ranked by impact, what each costs to build, and an action plan. If there is nothing worth automating, you paid $300 to know, not $1,500 to find out."},
     {k:['sprint','build'],r:"The <b>Build Sprint ($1,500)</b> is one workflow built end-to-end in 3–5 business days — tested, documented, with a 1-hour team training call and 7 days of post-launch support. 50% at booking, 50% at handoff. One workflow per sprint, fixed scope, fixed price."},
-    {k:['retainer','monthly','ongoing'],r:"The <b>Optimization Retainer ($500/mo)</b> keeps your systems monitored and improved — monthly health checks, reliability fixes, new automations as you grow, and a KPI report. Month-to-month, cancel anytime."},
+    {k:['retainer','monthly','ongoing'],r:"The <b>Optimization Retainer ($500/mo)</b> keeps your systems monitored and improved — monthly health checks, reliability fixes, new automations as you grow, and a KPI report. 3-month minimum, then month-to-month."},
     {k:['myagent','the company','your company','what do you do','what services','about the business'],r:"MyAgent builds practical AI automation for small businesses — AI receptionists that never miss a call, workflows that handle follow-up and admin, and step-by-step playbooks if you would rather DIY. Fixed prices, built for owners, not engineers."},
     {k:['mission','why do you','purpose','motivation'],r:"Small businesses lose 5–15 hours a week to repetitive admin — missed calls, manual follow-up, data entry. MyAgent exists to give those hours back with automation that pays for itself."},
     {k:['who is it for','ideal for','right fit','for my business','is this for me'],r:"Owners of businesses with 1–20 people who are losing hours to manual work — missed calls, scheduling chaos, follow-up falling through the cracks. If that sounds familiar, the $300 audit will show you exactly where."},
@@ -366,7 +366,7 @@ document.getElementById('contact-form').addEventListener('submit',function(e){
     {k:['roi','results','worth it','does it work'],r:"Straight answer: the businesses we help are typically losing 5–15 hours a week to manual work. The $300 audit maps your specific leaks and costs before you spend bigger — that is the de-risk."},
     {k:['review','testimonial','proof','clients say','trust'],r:"Honest answer: we are early, so there are no public reviews yet. That is exactly why the audit is $300 — a low-risk way to judge the work before committing to a build."},
     {k:['support','breaks','maintenance','after the build','post-launch','after handoff'],r:"Every build sprint includes 7 days of post-launch support — bug fixes and minor tweaks. After that, the $500/mo retainer covers monitoring, improvements, and priority help."},
-    {k:['pay','payment','invoice','deposit'],r:"Audit ($300) is due at booking. Build sprints ($1,500) are 50% at booking, 50% at handoff. The retainer ($500/mo) is monthly, month-to-month."},
+    {k:['pay','payment','invoice','deposit'],r:"Audit ($300) is due at booking. Build sprints ($1,500) are 50% at booking, 50% at handoff. The retainer ($500/mo) is monthly, 3-month minimum."},
     {k:['where are you','located','location','address','based'],r:"We are online-first — everything is delivered remotely. The contact form gets you a reply within one business day."},
     {k:['who runs','who runs the company','founder','owner','team','behind myagent'],r:"MyAgent operates under the Nova brand — I am Nova, and you will work with me from first message to handoff."},
     {k:['free','trial'],r:"The questionnaire is free and takes 10 minutes. The audit is $300 — the lowest-cost way to get a concrete plan for your business."},
