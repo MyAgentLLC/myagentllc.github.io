@@ -357,7 +357,7 @@ document.getElementById('contact-form').addEventListener('submit',function(e){
       sendBtn=document.getElementById('nova-send'),micBtn=document.getElementById('nova-mic'),
       spkBtn=document.getElementById('nova-spk'),hint=document.getElementById('nova-hint'),
       closeBtn=document.getElementById('nova-close'),opened=false,speakOn=false,recog=null,listening=false;
-  var PROXY_URL=''; /* AI upgrade: paste your Cloudflare Worker URL here after deploy, e.g. 'https://nova-proxy.you.workers.dev' */
+  var PROXY_URL='https://nova-proxy.myagentllc2026.workers.dev'; /* AI upgrade: Cloudflare Worker (Workers AI brain + ElevenLabs voice) */
   var hist=[]; /* recent conversation for the AI brain (plain text only) */
 
   var BRAIN=[
