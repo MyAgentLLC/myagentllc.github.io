@@ -497,10 +497,23 @@ document.getElementById('contact-form').addEventListener('submit',function(e){
       micBtn.classList.remove('live');listening=false;
       userSay(t);
     };
-    recog.onerror=recog.onend=function(){micBtn.classList.remove('live');listening=false;};
+    recog.onerror=function(e){
+      micBtn.classList.remove('live');listening=false;
+      var err=e&&e.error||'';
+      if(err==='not-allowed'||err==='service-not-allowed')
+        botSay('Microphone is blocked. Allow microphone access for this site in your browser settings, then tap the mic again.');
+      else if(err==='audio-capture')
+        botSay('No microphone found on this device.');
+      else if(err==='network')
+        botSay('Voice input needs an internet connection — check yours and try again.');
+      else if(err==='no-speech')
+        botSay("I didn't hear anything — tap the mic and try again.");
+    };
+    recog.onend=function(){micBtn.classList.remove('live');listening=false;};
     micBtn.addEventListener('click',function(){
       if(listening){recog.stop();return;}
-      try{recog.start();listening=true;micBtn.classList.add('live');}catch(e){}
+      try{recog.start();listening=true;micBtn.classList.add('live');}
+      catch(e){micBtn.classList.remove('live');listening=false;botSay('Voice input could not start in this browser — typing works fine.');}
     });
   }
   if('speechSynthesis' in window){speechSynthesis.getVoices();}
