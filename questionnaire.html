@@ -155,6 +155,14 @@ footer a{color:#38e1ff;text-decoration:none}
     </div></div>
   <div class="fg"><label class="lbl">What's broken, missing, or embarrassing about it? <span style="color:var(--muted2);font-weight:400">(optional)</span></label>
     <textarea name="web_issues" placeholder="e.g. Looks 10 years old, no mobile version, wrong phone number…"></textarea></div>
+  <div class="grid2">
+    <div class="fg"><label class="lbl">Does your site have a chatbot or AI assistant?</label>
+      <select name="web_aibot"><option>No</option><option>Yes</option><option>Not sure</option></select></div>
+    <div class="fg"><label class="lbl">Can it talk to visitors by voice or take calls?</label>
+      <select name="web_voicebot"><option>No</option><option>Yes</option><option>Not sure</option></select></div>
+  </div>
+  <div class="fg"><label class="lbl">If we could add AI chat and voice to your website, would you want a quote?</label>
+    <select name="web_ai_quote"><option>Yes — quote it</option><option>Maybe — explain it first</option><option>No</option></select></div>
 </section>
 <!-- 6 -->
 <section><h2>6 · Current setup</h2><p class="sub">What are you working with today?</p>
@@ -227,6 +235,7 @@ function send(e){
     ['Business','biz'],['Website','site'],['Industry','industry'],['Team size','team'],['Years','years'],
     ['Pain points','pain'],['Marketing now','mktg_now'],['New customers via','mktg_find'],['Marketing help?','mktg_help'],
     ['Website?','web_has'],['Site → leads?','web_leads'],['Visitor actions','web_actions'],['Site issues','web_issues'],
+    ['Site chatbot?','web_aibot'],['Site voice?','web_voicebot'],['Quote AI upgrade?','web_ai_quote'],
     ['Channels','channels'],['Current tools','tools'],['Phone coverage','phones'],
     ['10 hrs back →','hours10'],['Fix FIRST','first_fix'],['Timeline','timeline'],['Starting point','budget'],
     ['Other','other'],['Heard via','referral']];
