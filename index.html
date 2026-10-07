@@ -291,6 +291,11 @@ footer{border-top:1px solid var(--line);padding:52px 0 40px;color:var(--muted);f
     <label for="c-msg">Anything we should know?</label><textarea id="c-msg" rows="4" placeholder="Missed calls, scheduling chaos, follow-up falling through the cracks…"></textarea>
     <button class="btn" type="submit">Send →</button>
     <p class="micro">Opens your email app with everything filled in. Nothing is stored on this site.</p>
+    <div id="contact-fallback" style="display:none;margin-top:14px;padding:14px;border:1px solid var(--line);border-radius:10px;background:rgba(56,225,255,.06)">
+      <p style="margin:0 0 8px 0;font-size:.9rem">Your email app should have opened. If it didn't, copy the message below and send it to <a href="mailto:myagentllc2026@gmail.com">myagentllc2026@gmail.com</a>:</p>
+      <textarea id="contact-fallback-text" rows="6" readonly style="width:100%;font-size:.82rem;opacity:.9"></textarea>
+      <button type="button" class="btn ghost" id="contact-copy" style="margin-top:8px;font-size:.85rem;padding:8px 18px">Copy message</button>
+    </div>
   </form>
 </div></section>
 
@@ -355,7 +360,22 @@ document.getElementById('contact-form').addEventListener('submit',function(e){
   e.preventDefault();
   var g=function(id){return document.getElementById(id).value.trim();};
   var body='Name: '+g('c-name')+'\nEmail: '+g('c-email')+'\nBusiness: '+g('c-biz')+'\nInterested in: '+g('c-need')+'\n\nDetails:\n'+g('c-msg');
-  window.location.href='mailto:myagentllc2026@gmail.com?subject='+encodeURIComponent('MyAgent inquiry — '+g('c-biz'))+'&body='+encodeURIComponent(body);
+  var url='mailto:myagentllc2026@gmail.com?subject='+encodeURIComponent('MyAgent inquiry — '+g('c-biz'))+'&body='+encodeURIComponent(body);
+  var a=document.createElement('a');
+  a.href=url;a.style.display='none';
+  document.body.appendChild(a);a.click();
+  setTimeout(function(){document.body.removeChild(a);},500);
+  var fb=document.getElementById('contact-fallback');
+  document.getElementById('contact-fallback-text').value=body;
+  fb.style.display='block';
+  fb.scrollIntoView({behavior:'smooth',block:'nearest'});
+});
+document.getElementById('contact-copy').addEventListener('click',function(){
+  var t=document.getElementById('contact-fallback-text');
+  t.select();
+  try{document.execCommand('copy');}catch(e){}
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t.value);}
+  this.textContent='Copied!';
 });
 /* ================= NOVA CHATBOT ================= */
 (function(){
