@@ -303,7 +303,7 @@ footer{border-top:1px solid var(--line);padding:52px 0 40px;color:var(--muted);f
 <footer><div class="wrap"><div class="foot-grid">
   <div><b class="sg">MyAgent</b> · Automation by Nova<br><span style="font-size:.82rem">Cut the busywork. Keep the business.</span></div>
   <div><a href="https://myagentllc.gumroad.com" target="_blank" rel="noopener">Gumroad Store</a> &nbsp;·&nbsp; <a href="mailto:myagentllc2026@gmail.com">myagentllc2026@gmail.com</a></div>
-</div></div></footer>
+</div><div id="visit-counter" hidden style="margin-top:14px;font-size:.78rem;color:var(--muted)"><span id="visit-count">0</span> site visits</div></div></footer>
 
 <!-- CHATBOT -->
 <button id="nova-fab" class="nova-avatar" aria-label="Chat with Nova"><span class="ping"></span></button>
@@ -551,6 +551,19 @@ document.getElementById('contact-copy').addEventListener('click',function(){
     });
   }
   if('speechSynthesis' in window){speechSynthesis.getVoices();}
+})();
+
+/* Site visit counter — backed by the Cloudflare Worker (/visits). Aggregate
+ * count only; nothing identifying is collected or shown. If the counter
+ * endpoint is unavailable the element stays hidden instead of showing a
+ * fake or stale number. */
+(function(){
+  var el=document.getElementById('visit-counter'),n=document.getElementById('visit-count');
+  if(!el||!n)return;
+  fetch('https://nova-proxy.myagentllc2026.workers.dev/visits',{method:'GET',mode:'cors',cache:'no-store'})
+    .then(function(r){if(!r.ok)throw new Error('bad status');return r.json();})
+    .then(function(d){var v=parseInt(d&&d.visits,10);if(!(v>0))throw new Error('bad count');n.textContent=v.toLocaleString('en-US');el.hidden=false;})
+    .catch(function(){el.hidden=true;});
 })();
 </script>
 </body>
