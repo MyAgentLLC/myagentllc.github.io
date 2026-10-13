@@ -56,6 +56,8 @@ textarea{min-height:96px;resize:vertical}
 .btn{display:inline-block;background:var(--grad);color:#04060d;font-weight:700;font-size:1.1rem;padding:17px 54px;border-radius:12px;border:0;cursor:pointer;font-family:'Space Grotesk';transition:transform .18s,box-shadow .18s}
 .btn:hover{transform:translateY(-2px);box-shadow:0 12px 34px rgba(56,160,255,.35)}
 .privacy{color:var(--muted2);font-size:.85rem;margin-top:18px}
+.copybtn{background:none;border:0;color:#38e1ff;font:inherit;font-size:.85rem;text-decoration:underline;cursor:pointer;padding:0}
+#copymsg{color:#7CFC9A;display:none}
 footer{text-align:center;color:var(--muted2);font-size:.85rem;padding:30px 0 50px;border-top:1px solid var(--line)}
 footer a{color:#38e1ff;text-decoration:none}
 </style>
@@ -204,6 +206,10 @@ footer a{color:#38e1ff;text-decoration:none}
 <div class="submit-sec">
   <button class="btn" type="submit">Send to Nova →</button>
   <p class="privacy">Opens your email app with your answers filled in — nothing is stored on this site. We reply within one business day.</p>
+  <div id="copywrap" style="display:none">
+    <p class="privacy">Email app didn't open? <button type="button" class="copybtn" onclick="copyAnswers()">Copy my answers</button> and send them to myagentllc2026@gmail.com yourself.</p>
+    <p class="privacy" id="copymsg">Copied — paste it into an email to myagentllc2026@gmail.com.</p>
+  </div>
 </div>
 </form>
 </div>
@@ -228,8 +234,8 @@ form.addEventListener('input',pct);form.addEventListener('change',pct);pct();
 function val(n){var els=form.querySelectorAll('[name="'+n+'"]'),out=[];
   els.forEach(function(e){if((e.type==='checkbox'||e.type==='radio')){if(e.checked)out.push(e.value);}else if(e.value.trim())out.push(e.value.trim());});
   return out.join('; ')||'—';}
-function send(e){
-  e.preventDefault();
+var RECIP='myagentllc2026@gmail.com';
+function buildBody(){
   var L=[
     ['Name','name'],['Role','role'],['Email','email'],['Phone','phone'],['Contact pref','contact_pref'],
     ['Business','biz'],['Website','site'],['Industry','industry'],['Team size','team'],['Years','years'],
@@ -241,8 +247,26 @@ function send(e){
     ['Other','other'],['Heard via','referral']];
   var body='MYAGENT PRE-ONBOARDING QUESTIONNAIRE\n'+'='.repeat(38)+'\n\n';
   L.forEach(function(x){body+=x[0]+': '+val(x[1])+'\n';});
-  window.location.href='mailto:myagentllc2026@gmail.com?subject='+encodeURIComponent('Questionnaire — '+val('biz'))+'&body='+encodeURIComponent(body);
+  return body;
+}
+function send(e){
+  e.preventDefault();
+  var body=buildBody();
+  window.location.href='mailto:'+RECIP+'?subject='+encodeURIComponent('Questionnaire — '+val('biz'))+'&body='+encodeURIComponent(body);
+  document.getElementById('copywrap').style.display='block';
   return false;
+}
+function fallbackCopy(t){
+  var ta=document.createElement('textarea');ta.value=t;ta.style.position='fixed';ta.style.opacity='0';
+  document.body.appendChild(ta);ta.select();
+  try{document.execCommand('copy');}catch(e){}
+  document.body.removeChild(ta);
+}
+function copyAnswers(){
+  var body=buildBody();
+  var done=function(){document.getElementById('copymsg').style.display='block';};
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(body).then(done,function(){fallbackCopy(body);done();});}
+  else{fallbackCopy(body);done();}
 }
 </script>
 </body>
