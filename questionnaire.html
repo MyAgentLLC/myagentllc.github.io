@@ -207,8 +207,8 @@ footer a{color:#38e1ff;text-decoration:none}
   <button class="btn" type="submit">Send to Nova →</button>
   <p class="privacy">Opens your email app with your answers filled in — nothing is stored on this site. We reply within one business day.</p>
   <div id="copywrap" style="display:none">
-    <p class="privacy">Email app didn't open? <button type="button" class="copybtn" onclick="copyAnswers()">Copy my answers</button> and send them to myagentllc2026@gmail.com yourself.</p>
-    <p class="privacy" id="copymsg">Copied — paste it into an email to myagentllc2026@gmail.com.</p>
+    <p class="privacy">Email app didn't open? <button type="button" class="copybtn" onclick="copyAnswers()">Copy my answers</button> and send them to myagentllc2026@inkboxmail.com yourself.</p>
+    <p class="privacy" id="copymsg">Copied — paste it into an email to myagentllc2026@inkboxmail.com.</p>
   </div>
 </div>
 </form>
@@ -234,7 +234,7 @@ form.addEventListener('input',pct);form.addEventListener('change',pct);pct();
 function val(n){var els=form.querySelectorAll('[name="'+n+'"]'),out=[];
   els.forEach(function(e){if((e.type==='checkbox'||e.type==='radio')){if(e.checked)out.push(e.value);}else if(e.value.trim())out.push(e.value.trim());});
   return out.join('; ')||'—';}
-var RECIP='myagentllc2026@gmail.com';
+var RECIP='myagentllc2026@inkboxmail.com';
 function buildBody(){
   var L=[
     ['Name','name'],['Role','role'],['Email','email'],['Phone','phone'],['Contact pref','contact_pref'],
