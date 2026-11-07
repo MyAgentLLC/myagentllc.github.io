@@ -2,6 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; media-src 'self' blob: data:; connect-src 'self' https://nova-proxy.myagentllc2026.workers.dev https://fonts.googleapis.com https://fonts.gstatic.com; form-action 'self' mailto:; base-uri 'self'; object-src 'none'; upgrade-insecure-requests">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<!-- GitHub Pages cannot set HSTS, X-Content-Type-Options, frame-ancestors, or Permissions-Policy. This is only a fallback. -->
+<script>if(window.top!==window.self){window.top.location=window.self.location;}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tell us about your business | MyAgent</title>
 <meta name="description" content="Questionnaire for the free business review. The first 25 local businesses in Redding and Shasta County also get half off the Build Sprint: $750 instead of $1,500.">
@@ -67,6 +71,7 @@ label.fine{display:block;text-align:left;font-weight:400;color:var(--muted2);fon
 label.fine input{width:18px;height:18px;margin:0 8px 0 0;vertical-align:-3px;accent-color:#38e1ff}
 .fine a{color:#38e1ff}
 footer .legal{margin-top:12px}
+.hp{position:absolute!important;left:-9999px!important;top:auto!important;width:1px!important;height:1px!important;overflow:hidden!important;opacity:0!important;pointer-events:none!important}
 .copybtn{background:none;border:0;color:#38e1ff;font:inherit;font-size:.85rem;text-decoration:underline;cursor:pointer;padding:0}
 #copymsg{color:#7CFC9A;display:none}
 footer{text-align:center;color:var(--muted2);font-size:.85rem;padding:30px 0 50px;border-top:1px solid var(--line)}
@@ -222,6 +227,7 @@ footer a{color:#38e1ff;text-decoration:none}
 <div class="submit-sec">
   <p class="fine">By sending this, you agree we can reply by email about your request. We don't sell your info. See our <a href="privacy.html">Privacy Policy</a>.</p>
   <label class="fine"><input type="checkbox" name="sms_ok" value="yes" data-progress="ignore"> Optional: text me about my request at the number above. MyAgent. Msg frequency varies. Msg &amp; data rates may apply. Reply STOP to opt out, HELP for help. Consent is not required to buy anything. <a href="sms-terms.html">SMS terms</a> · <a href="privacy.html">Privacy</a></label>
+  <input type="text" name="website_hp" class="hp" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true" data-progress="ignore">
   <button class="btn" type="submit">Send to Nova →</button>
   <p class="privacy">Opens your email app with your answers filled in. This website does not store the form. We reply within one business day. Please don't include medical records, resident details, passwords, or payment-card numbers.</p>
   <div id="copywrap" style="display:none">
@@ -241,7 +247,7 @@ var form=document.getElementById('q');
 function pct(){
   var fields=form.querySelectorAll('input,textarea,select'),filled=0,total=0,seen={};
   fields.forEach(function(f){
-    if(f.name==='sms_ok'||f.getAttribute('data-progress')==='ignore')return;
+    if(f.name==='website_hp'||f.name==='sms_ok'||f.getAttribute('data-progress')==='ignore')return;
     if(f.type==='checkbox'||f.type==='radio'){
       if(!seen[f.name]){seen[f.name]=1;total++;
         if(form.querySelector('input[name="'+f.name+'"]:checked'))filled++;}
@@ -274,6 +280,8 @@ function buildBody(){
 }
 function send(e){
   e.preventDefault();
+  var hp=form.querySelector('[name="website_hp"]');
+  if(hp&&hp.value.trim())return false;
   var body=buildBody();
   window.location.href='mailto:'+RECIP+'?subject='+encodeURIComponent('Questionnaire — '+val('biz'))+'&body='+encodeURIComponent(body);
   document.getElementById('copywrap').style.display='block';
