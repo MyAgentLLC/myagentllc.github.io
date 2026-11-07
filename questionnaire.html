@@ -66,6 +66,11 @@ textarea{min-height:96px;resize:vertical}
 .btn{display:inline-block;background:var(--grad);color:#04060d;font-weight:700;font-size:1.1rem;padding:17px 54px;border-radius:12px;border:0;cursor:pointer;font-family:'Space Grotesk';transition:transform .18s,box-shadow .18s}
 .btn:hover{transform:translateY(-2px);box-shadow:0 12px 34px rgba(56,160,255,.35)}
 .privacy{color:var(--muted2);font-size:.85rem;margin-top:18px}
+p.fine{color:var(--muted2);font-size:.85rem;line-height:1.5;margin:0 auto 14px;max-width:640px}
+label.fine{display:block;text-align:left;font-weight:400;color:var(--muted2);font-size:.85rem;line-height:1.55;margin:0 auto 16px;max-width:640px}
+label.fine input{width:18px;height:18px;margin:0 8px 0 0;vertical-align:-3px;accent-color:#38e1ff}
+.fine a{color:#38e1ff}
+footer .legal{margin-top:12px}
 .hp{position:absolute!important;left:-9999px!important;top:auto!important;width:1px!important;height:1px!important;overflow:hidden!important;opacity:0!important;pointer-events:none!important}
 .copybtn{background:none;border:0;color:#38e1ff;font:inherit;font-size:.85rem;text-decoration:underline;cursor:pointer;padding:0}
 #copymsg{color:#7CFC9A;display:none}
@@ -85,7 +90,7 @@ footer a{color:#38e1ff;text-decoration:none}
   <span class="kicker">MyAgent · Questionnaire</span>
   <h1>Tell Nova about <span class="gx">your business</span></h1>
   <p class="lede">Same questions for every local business. About 10 minutes. We use the answers for the free business review: how you handle calls and inquiries, and where leads are slipping.</p>
-  <div class="meta"><span>⏱ ~10 minutes</span><span>📋 8 sections</span><span>🔒 Never shared, never sold</span></div>
+  <div class="meta"><span>⏱ ~10 minutes</span><span>📋 8 sections</span><span>Sent from your email app</span></div>
 </header>
 
 <form id="q" onsubmit="return send(event)">
@@ -220,9 +225,11 @@ footer a{color:#38e1ff;text-decoration:none}
 </section>
 
 <div class="submit-sec">
+  <p class="fine">By sending this, you agree we can reply by email about your request. We don't sell your info. See our <a href="privacy.html">Privacy Policy</a>.</p>
+  <label class="fine"><input type="checkbox" name="sms_ok" value="yes" data-progress="ignore"> Optional: text me about my request at the number above. MyAgent. Msg frequency varies. Msg &amp; data rates may apply. Reply STOP to opt out, HELP for help. Consent is not required to buy anything. <a href="sms-terms.html">SMS terms</a> · <a href="privacy.html">Privacy</a></label>
   <input type="text" name="website_hp" class="hp" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true" data-progress="ignore">
   <button class="btn" type="submit">Send to Nova →</button>
-  <p class="privacy">Opens your email app with your answers filled in — nothing is stored on this site. We reply within one business day.</p>
+  <p class="privacy">Opens your email app with your answers filled in. This website does not store the form. We reply within one business day. Please don't include medical records, resident details, passwords, or payment-card numbers.</p>
   <div id="copywrap" style="display:none">
     <p class="privacy">Email app didn't open? <button type="button" class="copybtn" onclick="copyAnswers()">Copy my answers</button> and send them to myagentllc2026@inkboxmail.com yourself.</p>
     <p class="privacy" id="copymsg">Copied — paste it into an email to myagentllc2026@inkboxmail.com.</p>
@@ -231,14 +238,16 @@ footer a{color:#38e1ff;text-decoration:none}
 </form>
 </div>
 
-<footer><div class="wrap"><a href="https://myagent.company">← Back to MyAgent</a> · Nova · © 2026</div></footer>
+<footer><div class="wrap"><a href="https://myagent.company">← Back to MyAgent</a> · Nova · © 2026
+<p class="legal"><a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a> · <a href="sms-terms.html">SMS terms</a></p>
+</div></footer>
 
 <script>
 var form=document.getElementById('q');
 function pct(){
   var fields=form.querySelectorAll('input,textarea,select'),filled=0,total=0,seen={};
   fields.forEach(function(f){
-    if(f.getAttribute('data-progress')==='ignore'||f.name==='website_hp')return;
+    if(f.name==='website_hp'||f.name==='sms_ok'||f.getAttribute('data-progress')==='ignore')return;
     if(f.type==='checkbox'||f.type==='radio'){
       if(!seen[f.name]){seen[f.name]=1;total++;
         if(form.querySelector('input[name="'+f.name+'"]:checked'))filled++;}
@@ -265,6 +274,8 @@ function buildBody(){
     ['Other','other'],['Heard via','referral']];
   var body='MYAGENT PRE-ONBOARDING QUESTIONNAIRE\n'+'='.repeat(38)+'\n\n';
   L.forEach(function(x){body+=x[0]+': '+val(x[1])+'\n';});
+  var sms=form.querySelector('[name="sms_ok"]');
+  body+='SMS opt-in: '+((sms&&sms.checked)?'yes':'no')+'\n';
   return body;
 }
 function send(e){
