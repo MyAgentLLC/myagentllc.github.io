@@ -128,6 +128,11 @@ form.contact input,form.contact textarea,form.contact select{width:100%;padding:
 form.contact input:focus,form.contact textarea:focus,form.contact select:focus{outline:none;border-color:var(--cyan);box-shadow:0 0 0 3px rgba(56,225,255,.12)}
 form.contact .btn{width:100%;margin-top:26px}
 .micro{color:var(--muted2);font-size:.88rem;margin-top:16px;text-align:center}
+.fine{color:var(--muted2);font-size:.85rem;line-height:1.5;margin:18px 0 0;text-align:left}
+.fine a{color:var(--cyan)}
+footer .legal{margin-top:18px;font-size:.85rem}
+footer .legal a{color:var(--cyan);text-decoration:none}
+footer .legal a:hover{text-decoration:underline}
 /* footer */
 footer{border-top:1px solid var(--line);padding:52px 0 40px;color:var(--muted);font-size:.9rem}
 .foot-grid{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
@@ -174,6 +179,7 @@ footer{border-top:1px solid var(--line);padding:52px 0 40px;color:var(--muted);f
 .nova-head .hbtn:hover{color:var(--text);background:rgba(120,170,255,.1)}
 .nova-head .hbtn.spk.on{color:var(--cyan)}
 .nova-hint{font-size:.75rem;color:var(--muted2);text-align:center;padding:0 14px 12px}
+.nova-hint a{color:var(--cyan)}
 @media(max-width:640px){h1{font-size:2.2rem}.hero{padding-top:120px}section{padding:64px 0}#nova-panel{bottom:100px;right:16px}}
 </style>
 </head>
@@ -289,7 +295,7 @@ footer{border-top:1px solid var(--line);padding:52px 0 40px;color:var(--muted);f
 
 <!-- CONTACT -->
 <section id="contact" style="padding-top:20px"><div class="wrap">
-  <div class="sec-head rv"><h2>Request the <span class="gx">free review</span></h2><p>First 25 local businesses: free business review, and the Build Sprint at $750 instead of $1,500. We reply within one business day. Nothing here is stored on the site.</p>
+  <div class="sec-head rv"><h2>Request the <span class="gx">free review</span></h2><p>First 25 local businesses: free business review, and the Build Sprint at $750 instead of $1,500. We reply within one business day. The form opens in your email app. This website does not store it.</p>
   <p style="margin-top:16px"><a class="btn ghost" href="questionnaire.html" style="font-size:.95rem;padding:12px 28px">Or fill out the questionnaire →</a></p></div>
   <form class="contact rv" id="contact-form">
     <label for="c-name">Your name</label><input id="c-name" required>
@@ -298,8 +304,9 @@ footer{border-top:1px solid var(--line);padding:52px 0 40px;color:var(--muted);f
     <label for="c-need">What do you want?</label>
     <select id="c-need"><option>Free business review — first 25, plus half off the sprint</option><option>Build Sprint — $1,500, or $750 for the first 25</option><option>Not sure yet — email me</option></select>
     <label for="c-msg">Anything we should know?</label><textarea id="c-msg" rows="4" placeholder="Missed calls during rounds, after-hours families, discharge planners who can't get through…"></textarea>
+    <p class="fine">By sending this, you agree we can reply by email about your request. We don't sell your info. See our <a href="privacy.html">Privacy Policy</a>.</p>
     <button class="btn" type="submit">Send →</button>
-    <p class="micro">Nothing is stored on this site — your message opens in your email app, addressed to myagentllc2026@inkboxmail.com.</p>
+    <p class="micro">Your message opens in your email app, addressed to myagentllc2026@inkboxmail.com. This website does not store the form.</p>
     <div id="contact-done" style="display:none;margin-top:14px;padding:16px;border:1px solid var(--line);border-radius:10px;background:rgba(56,225,255,.06)">
       <p style="margin:0 0 10px 0;font-size:.92rem"><b>Ready to send.</b> Tap below to open it in your email app, or copy the text and send it manually to <b>myagentllc2026@inkboxmail.com</b>:</p>
       <p style="margin:0 0 10px 0"><a class="btn" id="contact-mailto" href="#" style="font-size:.9rem;padding:10px 24px">Open in email app →</a></p>
@@ -312,7 +319,7 @@ footer{border-top:1px solid var(--line);padding:52px 0 40px;color:var(--muted);f
 <footer><div class="wrap"><div class="foot-grid">
   <div><b class="sg">MyAgent</b> · Nova<br><span style="font-size:.82rem">Missed-call text-back for Redding and Shasta County.</span><br><span style="font-size:.82rem">© 2026</span></div>
   <div><a href="mailto:myagentllc2026@inkboxmail.com">myagentllc2026@inkboxmail.com</a></div>
-</div><div id="visit-counter" hidden style="margin-top:14px;font-size:.78rem;color:var(--muted)"><span id="visit-count">0</span> site visits</div></div></footer>
+</div><p class="legal"><a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a> · <a href="sms-terms.html">SMS terms</a></p><div id="visit-counter" hidden style="margin-top:14px;font-size:.78rem;color:var(--muted)"><span id="visit-count">0</span> site visits</div></div></footer>
 
 <!-- CHATBOT -->
 <button id="nova-fab" class="nova-avatar" aria-label="Chat with Nova"><span class="ping"></span></button>
@@ -329,7 +336,7 @@ footer{border-top:1px solid var(--line);padding:52px 0 40px;color:var(--muted);f
     <button class="nova-btn mic" id="nova-mic" aria-label="Voice input" title="Voice input">🎙</button>
     <button class="nova-btn send" id="nova-send" aria-label="Send">↑</button>
   </div>
-  <div class="nova-hint" id="nova-hint">Nova answers from this page — for anything custom, use the contact form.</div>
+  <div class="nova-hint" id="nova-hint">I'm Nova, MyAgent's AI assistant. If you use chat, your messages are sent to an AI service to generate a reply. Don't send medical or sensitive information. <a href="privacy.html">Privacy Policy</a>.</div>
 </div>
 
 <script>
@@ -529,7 +536,7 @@ document.getElementById('contact-copy').addEventListener('click',function(){
   });
   /* voice input */
   var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-  if(!SR){micBtn.style.display='none';hint.textContent='Voice input needs Chrome or Edge — typing works everywhere.';}
+  if(!SR){micBtn.style.display='none';hint.innerHTML='Voice input needs Chrome or Edge — typing works everywhere. Chat messages are sent to an AI service to generate a reply. <a href="privacy.html">Privacy Policy</a>.';}
   else{
     recog=new SR();recog.lang='en-US';recog.interimResults=false;recog.maxAlternatives=1;
     recog.onresult=function(e){
