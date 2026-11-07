@@ -2,6 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; media-src 'self' blob: data:; connect-src 'self' https://nova-proxy.myagentllc2026.workers.dev https://fonts.googleapis.com https://fonts.gstatic.com; form-action 'self' mailto:; base-uri 'self'; object-src 'none'; upgrade-insecure-requests">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<!-- GitHub Pages cannot set HSTS, X-Content-Type-Options, frame-ancestors, or Permissions-Policy. This is only a fallback. -->
+<script>if(window.top!==window.self){window.top.location=window.self.location;}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MyAgent — Missed-Call Text-Back | Redding &amp; Shasta County</title>
 <meta name="description" content="Missed-call text-back for care homes and trades in Redding and Shasta County. The first 25 local businesses get a free business review and half off the Build Sprint: $750 instead of $1,500.">
@@ -128,6 +132,7 @@ form.contact input,form.contact textarea,form.contact select{width:100%;padding:
 form.contact input:focus,form.contact textarea:focus,form.contact select:focus{outline:none;border-color:var(--cyan);box-shadow:0 0 0 3px rgba(56,225,255,.12)}
 form.contact .btn{width:100%;margin-top:26px}
 .micro{color:var(--muted2);font-size:.88rem;margin-top:16px;text-align:center}
+.hp{position:absolute!important;left:-9999px!important;top:auto!important;width:1px!important;height:1px!important;overflow:hidden!important;opacity:0!important;pointer-events:none!important}
 /* footer */
 footer{border-top:1px solid var(--line);padding:52px 0 40px;color:var(--muted);font-size:.9rem}
 .foot-grid{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
@@ -298,6 +303,7 @@ footer{border-top:1px solid var(--line);padding:52px 0 40px;color:var(--muted);f
     <label for="c-need">What do you want?</label>
     <select id="c-need"><option>Free business review — first 25, plus half off the sprint</option><option>Build Sprint — $1,500, or $750 for the first 25</option><option>Not sure yet — email me</option></select>
     <label for="c-msg">Anything we should know?</label><textarea id="c-msg" rows="4" placeholder="Missed calls during rounds, after-hours families, discharge planners who can't get through…"></textarea>
+    <input type="text" id="contact-hp" name="website_hp" class="hp" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true" data-progress="ignore">
     <button class="btn" type="submit">Send →</button>
     <p class="micro">Nothing is stored on this site — your message opens in your email app, addressed to myagentllc2026@inkboxmail.com.</p>
     <div id="contact-done" style="display:none;margin-top:14px;padding:16px;border:1px solid var(--line);border-radius:10px;background:rgba(56,225,255,.06)">
@@ -332,6 +338,7 @@ footer{border-top:1px solid var(--line);padding:52px 0 40px;color:var(--muted);f
   <div class="nova-hint" id="nova-hint">Nova answers from this page — for anything custom, use the contact form.</div>
 </div>
 
+<script src="js/safe-html.js"></script>
 <script>
 /* ---------- typing effect ---------- */
 (function(){
@@ -369,6 +376,8 @@ footer{border-top:1px solid var(--line);padding:52px 0 40px;color:var(--muted);f
 /* ---------- contact form -> email ---------- */
 document.getElementById('contact-form').addEventListener('submit',function(e){
   e.preventDefault();
+  var hp=document.getElementById('contact-hp');
+  if(hp&&hp.value.trim())return;
   var g=function(id){return document.getElementById(id).value.trim();};
   var body='Name: '+g('c-name')+'\nEmail: '+g('c-email')+'\nBusiness: '+g('c-biz')+'\nInterested in: '+g('c-need')+'\n\nDetails:\n'+g('c-msg');
   var url='mailto:myagentllc2026@inkboxmail.com?subject='+encodeURIComponent('MyAgent inquiry — '+g('c-biz'))+'&body='+encodeURIComponent(body);
@@ -498,8 +507,10 @@ document.getElementById('contact-copy').addEventListener('click',function(){
     var t=addMsg('<span class="typing"><i></i><i></i><i></i></span>','bot');
     hist.push({role:'user',content:text});hist=hist.slice(-8);
     answerRemote(text).then(function(html){
-      /* The chat worker is outside this site and may still name the old inbox. */
+      /* The chat worker is outside this site and may still name the old inbox.
+         Remote replies are untrusted: allow only b, i, br, and mailto or same-site links. */
       html=String(html).replace(/myagentllc2026@gmail\.com/gi,'myagentllc2026@inkboxmail.com');
+      html=(typeof safeHTML==='function')?safeHTML(html):String(html).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
       if(/audit|playbook|gumroad|thumbnail|nova20|assessment|waste|free setup|\$500|retainer/i.test(html)) html=answer(text);
       t.innerHTML=html;msgs.scrollTop=msgs.scrollHeight;speak(html);
       hist.push({role:'assistant',content:String(html).replace(/<[^>]*>/g,'')});hist=hist.slice(-8);
