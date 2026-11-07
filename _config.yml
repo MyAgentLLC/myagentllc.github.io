@@ -1,3 +1,4 @@
 exclude:
   - README.md
   - WORKLOG.md
+  - tests
