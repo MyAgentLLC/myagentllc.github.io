@@ -136,12 +136,14 @@ async function main() {
     await home.page.close();
 
     var xssPage = await browser.newPage();
-    var xssBag = { logs: [], requests: [], failed: [] };
+    var xssBag = { logs: [], requests: [], failed: [], bodies: [] };
     attach(xssPage, xssBag);
     await xssPage.setRequestInterception(true);
     xssPage.on('request', function (req) {
-      if (req.url().indexOf('/chat') !== -1) fulfill(req, 200, JSON.stringify({ reply: XSS_REPLY }));
-      else req.continue();
+      if (req.url().indexOf('/chat') !== -1) {
+        if (req.method() === 'POST' && req.postData()) xssBag.bodies.push(req.postData());
+        fulfill(req, 200, JSON.stringify({ reply: XSS_REPLY }));
+      } else req.continue();
     });
     await xssPage.goto(base + '/', { waitUntil: 'domcontentloaded', timeout: 20000 });
     await xssPage.waitForSelector('#nova-panel.open');
@@ -181,6 +183,21 @@ async function main() {
     check(xss.hrefs.every(function (h) { return h.indexOf('javascript:') !== 0 && h.indexOf('https://evil.example') !== 0; }), 'disallowed link was kept: ' + xss.hrefs.join(','));
     check(xss.textHasScript, 'script markup was not shown as text');
     check(cspHits(xssBag).length === 0, 'CSP errors during xss fixture:\n' + cspHits(xssBag).join('\n'));
+    var firstBody = JSON.parse(xssBag.bodies[0] || '{"messages":[]}');
+    var firstHits = firstBody.messages.filter(function (m) { return m.content === 'tell me something unusual about turtles'; });
+    check(firstHits.length === 1, 'latest question was sent ' + firstHits.length + ' times');
+    await xssPage.type('#nova-text', 'and one more question about turtles');
+    await xssPage.click('#nova-send');
+    await xssPage.waitForFunction(function () {
+      return document.querySelectorAll('#nova-msgs .msg.user').length >= 2;
+    }, { timeout: 10000 });
+    await new Promise(function (r) { setTimeout(r, 500); });
+    var secondBody = JSON.parse(xssBag.bodies[xssBag.bodies.length - 1] || '{"messages":[]}');
+    function countRole(body, content) {
+      return body.messages.filter(function (m) { return m.content === content; }).length;
+    }
+    check(countRole(secondBody, 'tell me something unusual about turtles') === 1, 'first question duplicated in later history');
+    check(countRole(secondBody, 'and one more question about turtles') === 1, 'second question duplicated');
     await xssPage.close();
 
     var fb = await browser.newPage();
@@ -194,10 +211,18 @@ async function main() {
     await fb.type('#nova-text', 'how much does the build sprint cost');
     await fb.click('#nova-send');
     await fb.waitForFunction(function () {
-      return Array.prototype.some.call(document.querySelectorAll('#nova-msgs .msg.bot a'), function (a) {
-        return (a.getAttribute('href') || '').indexOf('paypal.com') !== -1;
+      return Array.prototype.some.call(document.querySelectorAll('#nova-msgs .msg.bot'), function (b) {
+        return b.textContent.indexOf('Chat is temporarily unavailable') !== -1 && b.textContent.indexOf('myagentllc2026@inkboxmail.com') !== -1;
       });
     }, { timeout: 10000 });
+    var fallback = await fb.evaluate(function () {
+      var msg = Array.prototype.find.call(document.querySelectorAll('#nova-msgs .msg.bot'), function (b) {
+        return b.textContent.indexOf('Chat is temporarily unavailable') !== -1;
+      });
+      return { html: msg.innerHTML, paypal: !!msg.querySelector('a[href*="paypal.com"]') };
+    });
+    check(fallback.html.indexOf('<') === -1, 'error message was inserted as HTML');
+    check(!fallback.paypal, 'worker failure still showed a canned PayPal answer');
     await fb.close();
 
     var q = await openPage(browser, base + '/questionnaire.html');

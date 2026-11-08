@@ -1,3 +1,5 @@
-# myagentllc.github.io
+# MyAgent
+
+https://myagent.company
 
 [Work log](WORKLOG.md)
