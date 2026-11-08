@@ -97,7 +97,7 @@ async function main() {
   try {
     var home = await openPage(browser, base + '/');
     var h1 = await home.page.$eval('h1', function (el) { return el.innerText; });
-    check(/Miss the call/i.test(h1), 'home h1 did not render: ' + h1);
+    check(/A helper that picks up/i.test(h1), 'home h1 did not render: ' + h1);
     await home.page.setViewport({ width: 390, height: 800 });
     var narrow = await home.page.evaluate(function () {
       return document.documentElement.scrollWidth <= document.documentElement.clientWidth + 2;
