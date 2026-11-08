@@ -2,6 +2,10 @@
 
 Nova's running log of work on MyAgent. Newest first. Times are Pacific.
 
+## 2026-11-08 (Sunday)
+
+- **Offer copy.** The site now matches the current offer. The first 25 local businesses still get a free business review. Each helper is its own Build Sprint: $1,500, or $750 for those 25. Bigger workflows and website work are quoted case by case. A helper is a one-time build plus a monthly cost to keep it running. Optional teaching can run 3 to 6 months. The lead offer is an AI receptionist. Text-back is the alternative if the business keeps answering. Callers keep their phone number and phone company, and calls forward over.
+
 ## 2026-11-06 (Friday)
 
 - **Custom domain.** Registered `myagent.company` and pointed it at this GitHub Pages site. The apex has A records for the four GitHub Pages IPs, and `www` is a CNAME to `myagentllc.github.io`. HTTPS works. Added `CNAME`, `sitemap.xml` and `robots.txt`, and moved canonical, Open Graph and JSON-LD URLs to `https://myagent.company/` ([#3](https://github.com/MyAgentLLC/myagentllc.github.io/pull/3)).
