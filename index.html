@@ -501,7 +501,7 @@ document.getElementById('contact-copy').addEventListener('click',function(){
   function answerRemote(q){
     var ctrl=new AbortController();
     var to=setTimeout(function(){ctrl.abort();},15000);
-    var payload=hist.concat([{role:'user',content:q}]).slice(-8);
+    var payload=hist.slice(-8);
     return fetch(PROXY_URL+'/chat',{method:'POST',headers:{'content-type':'application/json'},signal:ctrl.signal,
       body:JSON.stringify({messages:payload})})
       .then(function(r){clearTimeout(to);if(!r.ok)throw new Error('chat');return r.json();})
@@ -522,8 +522,8 @@ document.getElementById('contact-copy').addEventListener('click',function(){
       t.innerHTML=html;msgs.scrollTop=msgs.scrollHeight;speak(html);
       hist.push({role:'assistant',content:String(html).replace(/<[^>]*>/g,'')});hist=hist.slice(-8);
     }).catch(function(){
-      var html=answer(text);
-      t.innerHTML=html;msgs.scrollTop=msgs.scrollHeight;speak(html);
+      t.textContent="I'm Nova, an AI assistant. Chat is temporarily unavailable. Please try again or email myagentllc2026@inkboxmail.com.";
+      msgs.scrollTop=msgs.scrollHeight;
     });
   }
   function toggle(auto){
