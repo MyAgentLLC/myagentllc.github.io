@@ -60,6 +60,7 @@ var cases = [
   ['apex no path', '<a href="https://myagent.company">home</a>', '<a href="https://myagent.company" rel="noopener">home</a>'],
   ['www', '<a href="https://www.myagent.company/privacy.html">privacy</a>', '<a href="https://www.myagent.company/privacy.html" rel="noopener">privacy</a>'],
   ['relative file', '<a href="questionnaire.html">form</a>', '<a href="questionnaire.html" rel="noopener">form</a>'],
+  ['referral form', '<a href="referral-partner.html">refer</a>', '<a href="referral-partner.html" rel="noopener">refer</a>'],
   ['root relative', '<a href="/privacy.html">privacy</a>', '<a href="/privacy.html" rel="noopener">privacy</a>'],
   ['dot relative', '<a href="./terms.html">terms</a>', '<a href="./terms.html" rel="noopener">terms</a>'],
   ['query amp', '<a href="https://myagent.company/a?b=1&c=2">q</a>', '<a href="https://myagent.company/a?b=1&amp;c=2" rel="noopener">q</a>'],
