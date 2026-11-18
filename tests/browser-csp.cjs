@@ -264,6 +264,140 @@ async function main() {
     check(!hp.copyShown, 'honeypot still built the mailto');
     await q.page.close();
 
+    var ref = await openPage(browser, base + '/referral-partner.html');
+    var robots = await ref.page.$eval('meta[name="robots"]', function (el) { return el.getAttribute('content') || ''; });
+    check(/noindex/i.test(robots), 'referral page missing noindex: ' + robots);
+    var rh = await ref.page.$eval('h1', function (el) { return el.innerText; });
+    check(/want to refer/i.test(rh), 'referral h1 did not render: ' + rh);
+    await ref.page.setViewport({ width: 1280, height: 900 });
+    var refWide = await ref.page.evaluate(function () {
+      return document.documentElement.scrollWidth <= document.documentElement.clientWidth + 2;
+    });
+    check(refWide, 'referral page has horizontal overflow at 1280px');
+    check(ref.bag.requests.some(function (u) { return u.indexOf('https://fonts.googleapis.com/') !== -1; }), 'referral page did not load fonts');
+    check(cspHits(ref.bag).length === 0, 'CSP errors on referral page:\n' + cspHits(ref.bag).join('\n'));
+    try { fs.mkdirSync('/opt/cursor/artifacts', { recursive: true }); } catch (e) {}
+    await ref.page.screenshot({ path: '/opt/cursor/artifacts/referral_partner_desktop.png', fullPage: true });
+    await ref.page.setViewport({ width: 390, height: 844 });
+    var refNarrowEarly = await ref.page.evaluate(function () {
+      return document.documentElement.scrollWidth <= document.documentElement.clientWidth + 2;
+    });
+    check(refNarrowEarly, 'referral page has horizontal overflow at 390px');
+    await ref.page.screenshot({ path: '/opt/cursor/artifacts/referral_partner_mobile.png', fullPage: true });
+    await ref.page.setViewport({ width: 1280, height: 900 });
+    var refFlow = await ref.page.evaluate(function () {
+      function set(name, value) {
+        var el = document.querySelector('[name="' + name + '"]');
+        el.value = value;
+        el.dispatchEvent(new Event('input', { bubbles: true }));
+      }
+      var form = document.getElementById('refer');
+      var hp = document.querySelector('[name="website_hp"]');
+      var box = hp.getBoundingClientRect();
+      var before = document.getElementById('plabel').textContent;
+      hp.value = 'http://spam.example';
+      form.dispatchEvent(new Event('input', { bubbles: true }));
+      var afterHp = document.getElementById('plabel').textContent;
+      hp.value = '';
+      set('name', 'Ada Example');
+      set('role', 'Administrator');
+      set('email', 'ada@example.com');
+      set('phone', '5550100');
+      set('biz', 'North Facility');
+      set('license_number', '   ');
+      set('street', '   ');
+      set('city', '   ');
+      set('state', '   ');
+      set('zip', '   ');
+      set('referrals', 'Two care homes I have visited');
+      set('expect_return', 'No');
+      form.noValidate = true;
+      form.requestSubmit();
+      var whitespaceBlocked = document.getElementById('copywrap').style.display !== 'block';
+      set('license_number', '');
+      set('street', '');
+      set('city', '');
+      set('state', '');
+      set('zip', '');
+      form.requestSubmit();
+      var emptyBlocked = document.getElementById('copywrap').style.display !== 'block';
+      set('license_number', 'FAC-100');
+      set('street', '10 Care Lane');
+      set('city', 'Redding');
+      set('state', 'CA');
+      set('zip', '96001');
+      var body = window.buildBody();
+      form.requestSubmit();
+      var opened = document.getElementById('copywrap').style.display === 'block';
+      document.getElementById('copywrap').style.display = 'none';
+      hp.value = 'http://spam.example';
+      form.requestSubmit();
+      var hpBlocked = document.getElementById('copywrap').style.display !== 'block';
+      hp.value = '';
+      form.noValidate = false;
+      ['license_number', 'street', 'city', 'state', 'zip'].forEach(function (name) {
+        document.querySelector('[name="' + name + '"]').setCustomValidity('');
+      });
+      set('license_number', '');
+      set('street', '');
+      set('city', '');
+      set('state', '');
+      set('zip', '');
+      var htmlBlocksEmpty = form.checkValidity() === false;
+      set('street', '10 Care Lane');
+      set('city', 'Redding');
+      set('state', 'CA');
+      set('zip', '96001');
+      set('license_number', '   ');
+      document.querySelector('[name="license_number"]').setCustomValidity('');
+      document.getElementById('copywrap').style.display = 'none';
+      form.requestSubmit();
+      var jsBlocksWhitespace = document.getElementById('copywrap').style.display !== 'block';
+      var license = document.querySelector('[name="license_number"]');
+      var street = document.querySelector('[name="street"]');
+      return {
+        offscreen: box.right < 0 || box.width <= 2,
+        tab: hp.getAttribute('tabindex'),
+        progressSame: before === afterHp,
+        whitespaceBlocked: whitespaceBlocked,
+        emptyBlocked: emptyBlocked,
+        opened: opened,
+        hpBlocked: hpBlocked,
+        htmlBlocksEmpty: htmlBlocksEmpty,
+        jsBlocksWhitespace: jsBlocksWhitespace,
+        licenseRequired: license.required,
+        streetRequired: street.required,
+        cityRequired: document.querySelector('[name="city"]').required,
+        stateRequired: document.querySelector('[name="state"]').required,
+        zipRequired: document.querySelector('[name="zip"]').required,
+        bodyHasLicense: body.indexOf('State license number: FAC-100') !== -1,
+        bodyHidesHp: body.indexOf('spam.example') === -1 && body.indexOf('website_hp') === -1,
+        sendSrc: String(window.send)
+      };
+    });
+    check(refFlow.offscreen, 'referral honeypot is visible');
+    check(refFlow.tab === '-1', 'referral honeypot is in tab order');
+    check(refFlow.progressSame, 'referral progress counts the honeypot');
+    check(refFlow.whitespaceBlocked, 'whitespace license or address still built the mailto');
+    check(refFlow.emptyBlocked, 'empty license or address still built the mailto');
+    check(refFlow.opened, 'completed referral form did not open the email draft');
+    check(refFlow.hpBlocked, 'referral honeypot still built the mailto');
+    check(refFlow.htmlBlocksEmpty, 'HTML required did not block an empty license or address');
+    check(refFlow.jsBlocksWhitespace, 'submit handler did not block a whitespace-only license number');
+    check(refFlow.licenseRequired && refFlow.streetRequired && refFlow.cityRequired && refFlow.stateRequired && refFlow.zipRequired, 'license or address inputs are missing required');
+    check(refFlow.bodyHasLicense, 'mailto body dropped the license number');
+    check(refFlow.bodyHidesHp, 'mailto body included the honeypot');
+    var sendSrc = refFlow.sendSrc;
+    var mailtoAt = sendSrc.indexOf('mailto:');
+    check(mailtoAt > 0, 'send() does not build a mailto');
+    check(sendSrc.indexOf('.trim()') !== -1 && sendSrc.indexOf('.trim()') < mailtoAt, 'send() does not trim before the mailto');
+    check(sendSrc.indexOf('license_number') !== -1 && sendSrc.indexOf('license_number') < mailtoAt, 'send() does not check the license number');
+    ['street', 'city', 'state', 'zip'].forEach(function (name) {
+      check(sendSrc.indexOf("'" + name + "'") !== -1 && sendSrc.indexOf("'" + name + "'") < mailtoAt, 'send() does not check ' + name);
+    });
+    check(sendSrc.lastIndexOf('return false', mailtoAt) !== -1, 'send() does not return before the mailto');
+    await ref.page.close();
+
     var contact = await openPage(browser, base + '/#contact');
     var contactHp = await contact.page.evaluate(function () {
       document.getElementById('c-name').value = 'Test';
@@ -295,6 +429,7 @@ async function main() {
     process.exit(1);
   }
   console.log('browser CSP check passed');
+  process.exit(0);
 }
 
 main().catch(function (err) {
