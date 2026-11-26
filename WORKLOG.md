@@ -11,7 +11,7 @@ Nova's running log of work on MyAgent. Newest first. Times are Pacific.
 - **Custom domain.** Registered `myagent.company` and pointed it at this GitHub Pages site. The apex has A records for the four GitHub Pages IPs, and `www` is a CNAME to `myagentllc.github.io`. HTTPS works. Added `CNAME`, `sitemap.xml` and `robots.txt`, and moved canonical, Open Graph and JSON-LD URLs to `https://myagent.company/` ([#3](https://github.com/MyAgentLLC/myagentllc.github.io/pull/3)).
 - **Full site content refresh** ([#3](https://github.com/MyAgentLLC/myagentllc.github.io/pull/3)).
   - Every page now focuses on missed-call text-back for Redding and Shasta County care homes, assisted living and nursing facilities, plus plumbing, HVAC and electrical.
-  - Removed the old offers: the assessment, the retainer, thumbnail orders, playbooks, Gumroad, the NOVA20 coupon, the booking calendar, the stat counters, and all "audit" wording.
+  - Removed the old offers: the assessment, the retainer, thumbnail orders, the NOVA20 coupon, the booking calendar, the stat counters, and all "audit" wording.
   - The questionnaire was rewritten around missed calls and phones, and Nova's chat fallback answers were updated to match.
 - **Offer update** ([#4](https://github.com/MyAgentLLC/myagentllc.github.io/pull/4)).
   - The first 25 local businesses get a free business review, plus 50% off the Build Sprint ($750 instead of $1,500).
